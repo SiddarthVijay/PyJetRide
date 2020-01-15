@@ -1,9 +1,12 @@
+from gameBoard import startGame
+
+
 def showMainMenu():
     print("Press ENTER to Start Game")
     print("Press Q to Quit")
 
     gameChoice = input("")
     if gameChoice == "":
-        print("Going into game")
+        startGame()
     elif gameChoice == "Q":
-        print("Quitting out")
+        print("Thanks for Playing")
