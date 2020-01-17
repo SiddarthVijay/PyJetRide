@@ -1,4 +1,4 @@
-from gameBoard import startGame
+from gameFunctions import startGame
 
 
 def showMainMenu():
@@ -10,3 +10,6 @@ def showMainMenu():
         startGame()
     elif gameChoice == "Q":
         print("Thanks for Playing")
+    else:
+        print("Incorrect Choice")
+        showMainMenu()
