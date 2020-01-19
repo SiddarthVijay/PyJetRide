@@ -6,8 +6,8 @@ class Mandalorian:
                      ['/', '|', ' ', '|', '\\'],
                      [' ', '-', '-', '-', ' '],
                      [' ', '/', ' ', '\\', ' ']]
-        self.position_x = 0
-        self.position_y = 0
+        self.position_x = 2
+        self.position_y = 9
         self.bodyHeight = 6
         self.bodyWidth = 5
 
@@ -18,7 +18,7 @@ class Mandalorian:
         self.position_y -= 1
         print("moved down")
     def moveRight(self):
-        self.position_y += 1
+        self.position_x += 1
         print("moved right")
     def moveLeft(self):
         self.position_x -= 1

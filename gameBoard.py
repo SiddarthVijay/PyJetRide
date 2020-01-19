@@ -31,25 +31,52 @@ class GameBoard:
                 self.gameBoardArr[-i-1-self.groundSize][j][0] = "m"
         
         # Checking loop made for each loop, rn the loop is checking above mando for moving up
-        for i in range(mando.position_y + mando.bodyHeight, mando.position_y + mando.bodyHeight + 1):
-            for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
-                self.gameBoardArr[-i-1-self.groundSize][j][0] = "k"
+        i = mando.position_y + 1
+        for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
+            self.gameBoardArr[-i-2][j][0] = "k"
 
 
     def check(self, mando, char):
         # Right now Im just returning can or cannot move, but later I'll return what Im colliding with so that I can use for collision and shit
         if char == "w":
-            for i in range(mando.position_y + mando.bodyHeight, mando.position_y + mando.bodyHeight + 1):
-                for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
-                    if self.gameBoardArr[-i-1-self.groundSize][j][0] == " ":
-                        return 1
-                    else:
-                        return 0
+            i = mando.position_y + mando.bodyHeight
+            for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
+                if self.gameBoardArr[-i-1-self.groundSize][j][0] != " ":
+                    return 0
+        elif char == "s":
+            i = mando.position_y + 1
+            for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
+                if self.gameBoardArr[-i-2][j][0] != " ":
+                    return 0
+        #elif char == "d":
+        #    for i in range(mando.position_y + mando.bodyHeight, mando.position_y + mando.bodyHeight + 1):
+        #        for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
+        #            if self.gameBoardArr[-i-1-self.groundSize][j][0] == " ":
+        #                return 1
+        #            else:
+        #                return 0
+        #elif char == "e":
+        #    for i in range(mando.position_y + mando.bodyHeight, mando.position_y + mando.bodyHeight + 1):
+        #        for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
+        #            if self.gameBoardArr[-i-1-self.groundSize][j][0] == " ":
+        #                return 1
+        #            else:
+        #                return 0
         return 1
 
-    def moveMando(self, mando, char):
-        if char == "w":
-            return 1
+    def removeMando(self, mando):
+        # remove the last line and add one line
+        for i in range(mando.position_y, mando.position_y + mando.bodyHeight):
+            for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
+                self.gameBoardArr[-i-1-self.groundSize][j][0] = " "
+
+        return 1
+    
+    def moveMando(self, mando):
+        # remove the last line and add one line
+        for i in range(mando.position_y, mando.position_y + mando.bodyHeight):
+            for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
+                self.gameBoardArr[-i-1-self.groundSize][j][0] = "m"
 
         return 1
 
