@@ -29,15 +29,38 @@ class GameBoard:
         for i in range(mando.position_y, mando.position_y + mando.bodyHeight):
             for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
                 self.gameBoardArr[-i-1-self.groundSize][j][0] = "m"
+        
+        # Checking loop made for each loop, rn the loop is checking above mando for moving up
+        for i in range(mando.position_y + mando.bodyHeight, mando.position_y + mando.bodyHeight + 1):
+            for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
+                self.gameBoardArr[-i-1-self.groundSize][j][0] = "k"
 
 
-    def check(self, char):
+    def check(self, mando, char):
         # Right now Im just returning can or cannot move, but later I'll return what Im colliding with so that I can use for collision and shit
         if char == "w":
-            #checking
+            for i in range(mando.position_y + mando.bodyHeight, mando.position_y + mando.bodyHeight + 1):
+                for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
+                    if self.gameBoardArr[-i-1-self.groundSize][j][0] == " ":
+                        return 1
+                    else:
+                        return 0
+        return 1
 
+    def moveMando(self, mando, char):
+        if char == "w":
+            return 1
+
+        return 1
 
     def printBoard(self):
+        print("\033[0;0H]")
+        for i in range(self.frameHeight):
+            for j in range(self.frameWidth):
+                print(self.gameBoardArr[i][j][0], end="")
+            print()
+
+    def cprintBoard(self):
         print("\033[0;0H]")
         for i in range(self.frameHeight):
             for j in range(self.frameWidth):
@@ -47,6 +70,8 @@ class GameBoard:
                     print(colorama.Back.RED + " ", end="")
                 elif self.gameBoardArr[i][j][0] == "m":
                     print(colorama.Back.YELLOW + " ", end="")
+                elif self.gameBoardArr[i][j][0] == "k":
+                    print("k", end="")
                 else:
                     print(colorama.Back.BLUE + " ", end="")
             print()

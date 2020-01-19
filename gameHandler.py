@@ -2,22 +2,22 @@ def mandoHandler(board, mando, char):
     '''Handles movement, firing of gun etc'''
 
     if char == "w":
-        canMove = board.check(char)
+        canMove = board.check(mando, char)
         if canMove:
             mando.moveUp()
-            board.update()
+            board.moveMando(mando, char)
     elif char == "s":
-        canMove = board.check(char)
+        canMove = board.check(mando, char)
         if canMove:
             mando.moveDown()
-            board.update()
+            board.moveMando(mando, char)
     elif char == "d":
-        canMove = board.check(char)
+        canMove = board.check(mando, char)
         if canMove:
             mando.moveRight()
-            board.update()
+            board.moveMando(mando, char)
     elif char == "a":
-        canMove = board.check(char)
+        canMove = board.check(mando, char)
         if canMove:
             mando.moveLeft()
-            board.update()
+            board.moveMando(mando, char)
