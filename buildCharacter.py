@@ -42,5 +42,8 @@ class beamBarrier:
 
         self.formChoice = random.randint(1, 4)
 
+        self.position_x = 0
+        self.position_y = 0
+
 # mando = Mandalorian()
 # mando.print()
