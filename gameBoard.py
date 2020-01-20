@@ -71,7 +71,7 @@ class GameBoard:
                 elif self.gameBoardArr[-i-2][j][0] != " ":
                     return 0
         elif char == "d":
-            if mando.position_x + self.offset + mando.bodyWidth == self.frameWidth:
+            if (mando.position_x - self.offset + mando.bodyWidth) > (self.frameWidth-1):
                 return 0
             j = mando.position_x + mando.bodyWidth
             for i in range(mando.position_y + self.groundSize, mando.position_y + mando.bodyHeight + self.groundSize):
