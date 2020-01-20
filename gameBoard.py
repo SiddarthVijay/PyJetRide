@@ -41,9 +41,9 @@ class GameBoard:
                 self.gameBoardArr[coinHeight][coinWidth][0] = "c"
         
         # Checking loop made for each loop, rn the loop is checking above mando for moving up
-        #j = mando.position_x - 1
-        #for i in range(mando.position_y + self.groundSize, mando.position_y + mando.bodyHeight + self.groundSize):
-        #    self.gameBoardArr[-i-1][j][0] = "k"
+        j = mando.position_x + mando.bodyWidth
+        for i in range(mando.position_y + self.groundSize, mando.position_y + mando.bodyHeight + self.groundSize):
+            self.gameBoardArr[-i-1][j][0] = "k"
 
 
     def check(self, mando, char):
@@ -51,17 +51,26 @@ class GameBoard:
         if char == "w":
             i = mando.position_y + mando.bodyHeight
             for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
-                if self.gameBoardArr[-i-1-self.groundSize][j][0] != " ":
+                if self.gameBoardArr[-i-1-self.groundSize][j][0] == "c":
+                    mando.SCORE += 1
+                    return 1
+                elif self.gameBoardArr[-i-1-self.groundSize][j][0] != " ":
                     return 0
         elif char == "s":
             i = mando.position_y + 1
             for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
-                if self.gameBoardArr[-i-2][j][0] != " ":
+                if self.gameBoardArr[-i-2][j][0] == "c":
+                    mando.SCORE += 1
+                    return 1
+                elif self.gameBoardArr[-i-2][j][0] != " ":
                     return 0
         elif char == "d":
             j = mando.position_x + mando.bodyWidth
             for i in range(mando.position_y + self.groundSize, mando.position_y + mando.bodyHeight + self.groundSize):
-                if self.gameBoardArr[-i-1][j][0] != " ":
+                if self.gameBoardArr[-i-1][j][0] == "c":
+                    mando.SCORE += 1
+                    return 1
+                elif self.gameBoardArr[-i-1][j][0] != " ":
                         return 0
         elif char == "a":
             # To check for the left end in the beginning
@@ -69,7 +78,10 @@ class GameBoard:
                 return 0
             j = mando.position_x - 1
             for i in range(mando.position_y + self.groundSize, mando.position_y + mando.bodyHeight + self.groundSize):
-                if self.gameBoardArr[-i-1][j][0] != " ":
+                if self.gameBoardArr[-i-1][j][0] == "c":
+                    mando.SCORE += 1
+                    return 1
+                elif self.gameBoardArr[-i-1][j][0] != " ":
                         return 0
         return 1
 
@@ -86,6 +98,7 @@ class GameBoard:
         for i in range(mando.position_y, mando.position_y + mando.bodyHeight):
             for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
                 self.gameBoardArr[-i-1-self.groundSize][j][0] = "m"
+        print(mando.SCORE)
 
         return 1
 

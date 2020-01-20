@@ -11,6 +11,9 @@ class Mandalorian:
         self.bodyHeight = 6
         self.bodyWidth = 5
 
+        self.LIVES = 3
+        self.SCORE = 0
+
     def moveUp(self):
         self.position_y += 1
         print("moved up")

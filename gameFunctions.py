@@ -12,9 +12,9 @@ def endGame():
     return 1
 
 
-def gameLoop(board):
+def gameLoop(board, mando):
     # Handling lives
-    if globals.LIVES == 0:
+    if mando.LIVES == 0:
         gameEnd = endGame()
     else:
         board.printBoard()
@@ -32,13 +32,9 @@ def startGame():
     os.system('clear')
     boardInstance = GameBoard(jango)
 
-    # Start the game loop
-    globals.LIVES = 3
-    globals.SCORE = 0
-
     #for i in range(10):
     while(1):
-        gameEnd = gameLoop(boardInstance)
+        gameEnd = gameLoop(boardInstance, jango)
         char = input.get()
         if char == 'q':
             gameEnd += endGame()
