@@ -31,9 +31,9 @@ class GameBoard:
                 self.gameBoardArr[-i-1-self.groundSize][j][0] = "m"
         
         # Checking loop made for each loop, rn the loop is checking above mando for moving up
-        j = mando.position_x + mando.bodyWidth
-        for i in range(mando.position_y + self.groundSize, mando.position_y + mando.bodyHeight + self.groundSize):
-            self.gameBoardArr[-i-1][j][0] = "k"
+        #j = mando.position_x - 1
+        #for i in range(mando.position_y + self.groundSize, mando.position_y + mando.bodyHeight + self.groundSize):
+        #    self.gameBoardArr[-i-1][j][0] = "k"
 
 
     def check(self, mando, char):
@@ -53,13 +53,14 @@ class GameBoard:
             for i in range(mando.position_y + self.groundSize, mando.position_y + mando.bodyHeight + self.groundSize):
                 if self.gameBoardArr[-i-1][j][0] != " ":
                         return 0
-        #elif char == "e":
-        #    for i in range(mando.position_y + mando.bodyHeight, mando.position_y + mando.bodyHeight + 1):
-        #        for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
-        #            if self.gameBoardArr[-i-1-self.groundSize][j][0] == " ":
-        #                return 1
-        #            else:
-        #                return 0
+        elif char == "a":
+            # To check for the left end in the beginning
+            if mando.position_x == 0:
+                return 0
+            j = mando.position_x - 1
+            for i in range(mando.position_y + self.groundSize, mando.position_y + mando.bodyHeight + self.groundSize):
+                if self.gameBoardArr[-i-1][j][0] != " ":
+                        return 0
         return 1
 
     def removeMando(self, mando):

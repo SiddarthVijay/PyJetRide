@@ -6,8 +6,8 @@ class Mandalorian:
                      ['/', '|', ' ', '|', '\\'],
                      [' ', '-', '-', '-', ' '],
                      [' ', '/', ' ', '\\', ' ']]
-        self.position_x = 2
-        self.position_y = 3
+        self.position_x = 0
+        self.position_y = 0
         self.bodyHeight = 6
         self.bodyWidth = 5
 
