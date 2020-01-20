@@ -1,5 +1,5 @@
 import colorama
-
+from random import seed, randint
 
 class GameBoard:
     def __init__(self, mando, gameWidth=2000, gameHeight=50):
@@ -29,6 +29,16 @@ class GameBoard:
         for i in range(mando.position_y, mando.position_y + mando.bodyHeight):
             for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
                 self.gameBoardArr[-i-1-self.groundSize][j][0] = "m"
+
+        seed(1)
+        # Adding coins
+        numberCoins = randint(250, 500)
+        # Now actually adding these coins to gameboard
+        for i in range(numberCoins):
+            coinHeight = randint(self.groundSize+1, gameHeight-self.skySize)
+            coinWidth = randint(0, gameWidth-1)
+            if self.gameBoardArr[coinHeight][coinWidth][0] == " ":
+                self.gameBoardArr[coinHeight][coinWidth][0] = "c"
         
         # Checking loop made for each loop, rn the loop is checking above mando for moving up
         #j = mando.position_x - 1
@@ -85,6 +95,7 @@ class GameBoard:
             for j in range(self.frameWidth):
                 print(self.gameBoardArr[i][j][0], end="")
             print()
+        return
 
     def cprintBoard(self):
         print("\033[0;0H]")
