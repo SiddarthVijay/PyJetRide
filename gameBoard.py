@@ -10,6 +10,8 @@ class GameBoard:
         self.frameHeight = 50
         self.offset = 0
 
+        self.gameClock = 0
+
         self.gameBoardArr = [[[" "] for i in range(self.gameWidth)]
                              for j in range(self.gameHeight)]
 
@@ -47,6 +49,8 @@ class GameBoard:
         for i in range(mando.position_y + self.groundSize, mando.position_y + mando.bodyHeight + self.groundSize):
             self.gameBoardArr[-i-1][j][0] = "k"
 
+    def updateClock(self):
+        self.gameClock += 1
 
     def check(self, mando, char):
         # Right now Im just returning can or cannot move, but later I'll return what Im colliding with so that I can use for collision and shit
@@ -105,10 +109,18 @@ class GameBoard:
         return 1
 
     def updateFrame(self, mando):
-        if (mando.position_x - mando.bodyWidth/2) >= ((self.frameWidth + self.offset)/2):
-            self.offset += 1
+        if self.gameClock % 3 == 2:
+            if mando.position_x == self.offset:
+                canMove = self.check(mando, 'd')
+                if canMove:
+                    self.removeMando(mando)
+                    mando.moveRight()
+                    self.moveMando(mando)
+                    self.offset += 1
+            else:
+                self.offset += 1
 
-    def printBoard(self):
+    def printBoard(self, mando):
         print("\033[0;0H]")
         for i in range(self.frameHeight):
             for j in range(self.offset, self.frameWidth + self.offset):
@@ -116,18 +128,27 @@ class GameBoard:
             print()
         return
 
-    def cprintBoard(self):
+    def cprintBoard(self, mando):
         print("\033[0;0H]")
+        bodyCounter = 0
         for i in range(self.frameHeight):
-            for j in range(self.offset, self.frameWidth + self.offset):
-                if self.gameBoardArr[i][j][0] == "g":
+            for j in range(self.offset-1, self.frameWidth+self.offset+1):
+                if (j == self.frameWidth + self.offset) or (j == self.offset - 1):
+                    print(colorama.Back.RED + " ", end="")
+                elif self.gameBoardArr[i][j][0] == "g":
                     print(colorama.Back.GREEN + " ", end="")
                 elif self.gameBoardArr[i][j][0] == "t":
                     print(colorama.Back.RED + " ", end="")
                 elif self.gameBoardArr[i][j][0] == "m":
-                    print(colorama.Back.YELLOW + " ", end="")
+                    if mando.body[bodyCounter] == " ":
+                        print(colorama.Back.BLUE + " ", end="")
+                    else:
+                        print(colorama.Back.BLUE + colorama.Fore.RED + mando.body[bodyCounter], end="")
+                    bodyCounter += 1
                 elif self.gameBoardArr[i][j][0] == "k":
-                    print("k", end="")
+                    print(colorama.Back.RED + " ", end="")
+                elif self.gameBoardArr[i][j][0] == "c":
+                    print(colorama.Back.BLUE + colorama.Fore.YELLOW + "C", end="")
                 else:
                     print(colorama.Back.BLUE + " ", end="")
             print()

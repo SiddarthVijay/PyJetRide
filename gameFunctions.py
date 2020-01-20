@@ -17,7 +17,9 @@ def gameLoop(board, mando):
     if mando.LIVES == 0:
         gameEnd = endGame()
     else:
-        board.printBoard()
+        board.updateClock()
+        board.printBoard(mando)
+        board.updateFrame(mando)
         gameEnd = 0
 
     return gameEnd

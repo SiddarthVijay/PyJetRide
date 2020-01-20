@@ -19,10 +19,28 @@ def mandoHandler(board, mando, char):
             board.removeMando(mando)
             mando.moveRight()
             board.moveMando(mando)
-            board.updateFrame(mando)
+        # Gravity
+        canMove = board.check(mando, "s")
+        if canMove:
+            board.removeMando(mando)
+            mando.moveDown()
+            board.moveMando(mando)
     elif char == "a":
         canMove = board.check(mando, char)
         if canMove:
             board.removeMando(mando)
             mando.moveLeft()
+            board.moveMando(mando)
+        # Gravity
+        canMove = board.check(mando, "s")
+        if canMove:
+            board.removeMando(mando)
+            mando.moveDown()
+            board.moveMando(mando)
+    elif char == "":
+        # Gravity
+        canMove = board.check(mando, "s")
+        if canMove:
+            board.removeMando(mando)
+            mando.moveDown()
             board.moveMando(mando)

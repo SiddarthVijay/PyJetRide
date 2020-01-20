@@ -1,11 +1,8 @@
+import random
+
 class Mandalorian:
     def __init__(self):
-        self.body = [[' ', '_', '_', '_', ' '],
-                     [' ', '|', '+', '|', ' '],
-                     [' ', '-', '-', '-', ' '],
-                     ['/', '|', ' ', '|', '\\'],
-                     [' ', '-', '-', '-', ' '],
-                     [' ', '/', ' ', '\\', ' ']]
+        self.body = [' ', '_', '_', '_', ' ', ' ', '|', '+', '|', ' ', ' ', '-', '-', '-', ' ', '/', '|', ' ', '|', '\\', ' ', '-', '-', '-', ' ', ' ', '/', ' ', '\\', ' ']
         self.position_x = 0
         self.position_y = 0
         self.bodyHeight = 6
@@ -13,6 +10,8 @@ class Mandalorian:
 
         self.LIVES = 3
         self.SCORE = 0
+
+        self.isShield = 0
 
     def moveUp(self):
         self.position_y += 1
@@ -36,10 +35,12 @@ class Mandalorian:
 
 class beamBarrier:
     def __init__(self):
-        self.form1 = [['-', '-']]
-        self.form2 = [['-'], ['-']]
-        self.form3 = [['-'],[' ', '-']]
-        self.form4 = [[' ', '-'], ['-']]
+        self.form1 = [['-', '-', '-', '-']]
+        self.form2 = [['-'], ['-'], ['-'], ['-']]
+        self.form3 = [['-'],[' ', '-'], [' ', ' ', '-'], [' ', ' ', ' ', '-']]
+        self.form4 = [[' ', ' ', ' ', '-'], [' ', ' ', '-'], [' ', '-'], ['-']]
 
-mando = Mandalorian()
-mando.print()
+        self.formChoice = random.randint(1, 4)
+
+# mando = Mandalorian()
+# mando.print()
