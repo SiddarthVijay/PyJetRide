@@ -71,6 +71,8 @@ class GameBoard:
                 elif self.gameBoardArr[-i-2][j][0] != " ":
                     return 0
         elif char == "d":
+            if mando.position_x + self.offset + mando.bodyWidth == self.frameWidth:
+                return 0
             j = mando.position_x + mando.bodyWidth
             for i in range(mando.position_y + self.groundSize, mando.position_y + mando.bodyHeight + self.groundSize):
                 if self.gameBoardArr[-i-1][j][0] == "c":
@@ -109,16 +111,17 @@ class GameBoard:
         return 1
 
     def updateFrame(self, mando):
-        if self.gameClock % 3 == 2:
-            if mando.position_x == self.offset:
-                canMove = self.check(mando, 'd')
-                if canMove:
-                    self.removeMando(mando)
-                    mando.moveRight()
-                    self.moveMando(mando)
+        if self.offset + self.frameWidth < self.gameWidth:
+            if self.gameClock % 3 == 2:
+                if mando.position_x == self.offset:
+                    canMove = self.check(mando, 'd')
+                    if canMove:
+                        self.removeMando(mando)
+                        mando.moveRight()
+                        self.moveMando(mando)
+                        self.offset += 1
+                else:
                     self.offset += 1
-            else:
-                self.offset += 1
 
     def printBoard(self, mando):
         print("\033[0;0H]")
