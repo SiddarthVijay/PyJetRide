@@ -19,6 +19,7 @@ def mandoHandler(board, mando, char):
             board.removeMando(mando)
             mando.moveRight()
             board.moveMando(mando)
+            board.updateFrame(mando)
     elif char == "a":
         canMove = board.check(mando, char)
         if canMove:

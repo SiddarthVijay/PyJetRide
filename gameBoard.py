@@ -8,6 +8,8 @@ class GameBoard:
 
         self.frameWidth = 200
         self.frameHeight = 50
+        self.offset = 0
+
         self.gameBoardArr = [[[" "] for i in range(self.gameWidth)]
                              for j in range(self.gameHeight)]
 
@@ -74,7 +76,7 @@ class GameBoard:
                         return 0
         elif char == "a":
             # To check for the left end in the beginning
-            if mando.position_x == 0:
+            if mando.position_x == self.offset:
                 return 0
             j = mando.position_x - 1
             for i in range(mando.position_y + self.groundSize, mando.position_y + mando.bodyHeight + self.groundSize):
@@ -102,10 +104,14 @@ class GameBoard:
 
         return 1
 
+    def updateFrame(self, mando):
+        if (mando.position_x - mando.bodyWidth/2) >= ((self.frameWidth + self.offset)/2):
+            self.offset += 1
+
     def printBoard(self):
         print("\033[0;0H]")
         for i in range(self.frameHeight):
-            for j in range(self.frameWidth):
+            for j in range(self.offset, self.frameWidth + self.offset):
                 print(self.gameBoardArr[i][j][0], end="")
             print()
         return
@@ -113,7 +119,7 @@ class GameBoard:
     def cprintBoard(self):
         print("\033[0;0H]")
         for i in range(self.frameHeight):
-            for j in range(self.frameWidth):
+            for j in range(self.offset, self.frameWidth + self.offset):
                 if self.gameBoardArr[i][j][0] == "g":
                     print(colorama.Back.GREEN + " ", end="")
                 elif self.gameBoardArr[i][j][0] == "t":
