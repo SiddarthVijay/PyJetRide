@@ -131,4 +131,3 @@ class GameBoard:
                 else:
                     print(colorama.Back.BLUE + " ", end="")
             print()
-        return
