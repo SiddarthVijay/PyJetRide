@@ -48,12 +48,23 @@ class GameBoard:
         # Adding the beams
         numberBeams = randint(50, 100)
         # Now actually adding the beams to gameboard
-        
+        for i in range(numberBeams):
+            beamY = randint(self.groundSize+1, gameHeight-self.skySize)
+            beamX = randint(0, gameWidth-1)
+            beam = beamBarrier(beamX, beamY)
+
         
         # Checking loop made for each loop, rn the loop is checking above mando for moving up
-        j = mando.position_x + mando.bodyWidth
-        for i in range(mando.position_y + self.groundSize, mando.position_y + mando.bodyHeight + self.groundSize):
-            self.gameBoardArr[-i-1][j][0] = "k"
+        #j = mando.position_x + mando.bodyWidth
+        #for i in range(mando.position_y + self.groundSize, mando.position_y + mando.bodyHeight + self.groundSize):
+        #    self.gameBoardArr[-i-1][j][0] = "k"
+        
+        # Checking loop for building beams
+        # Vertical beams - done
+        beam = beamBarrier(8, 6)
+        j = beam.position_x
+        for i in range(beam.position_y + self.groundSize, beam.position_y + beam.size + self.groundSize):            
+            self.gameBoardArr[-i-1][j][0] = "-"
 
     def updateClock(self):
         self.gameClock += 1

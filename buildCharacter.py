@@ -34,7 +34,7 @@ class Mandalorian:
 
 
 class beamBarrier:
-    def __init__(self):
+    def __init__(self, x, y):
         self.form1 = [['-', '-', '-', '-']]
         self.form2 = [['-'], ['-'], ['-'], ['-']]
         self.form3 = [['-'],[' ', '-'], [' ', ' ', '-'], [' ', ' ', ' ', '-']]
@@ -42,8 +42,10 @@ class beamBarrier:
 
         self.formChoice = random.randint(1, 4)
 
-        self.position_x = 0
-        self.position_y = 0
+        self.size = 6
+
+        self.position_x = x
+        self.position_y = y
 
 # mando = Mandalorian()
 # mando.print()
