@@ -18,6 +18,8 @@ class GameBoard:
         self.frameSpeed = 1
 
         self.gameClock = 0
+        self.currentShieldONTime = 0
+        self.currentShieldCoolDownTime = 0
 
         self.gameBoardArr = [[[" "] for i in range(self.gameWidth)]
                              for j in range(self.gameHeight)]
@@ -95,7 +97,6 @@ class GameBoard:
                             self.gameBoardArr[-i-1][j][0] = "-" + str(i)
                     except:
                         pass
-
     def removeBarrier(self, barrier):
         for i in range(self.gameHeight):
             for j in range(self.gameWidth):
@@ -104,6 +105,13 @@ class GameBoard:
 
     def updateClock(self):
         self.gameClock += 1
+    
+    def shieldChecker(self, mando):
+        if mando.shieldToggle == 1:
+            return 0
+        elif mando.shieldToggle == 0:
+            if self.currentShieldCoolDownTime <= 0:
+                return 1
 
     def check(self, mando, char):
         # Right now Im just returning can or cannot move, but later I'll return what Im colliding with so that I can use for collision and shit
@@ -187,7 +195,7 @@ class GameBoard:
         return 1
 
     def removeMando(self, mando):
-        # remove the last line and add one line
+        # remove the entire character
         for i in range(mando.position_y, mando.position_y + mando.bodyHeight):
             for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
                 self.gameBoardArr[-i-1-self.groundSize][j][0] = " "
@@ -199,7 +207,8 @@ class GameBoard:
         for i in range(mando.position_y, mando.position_y + mando.bodyHeight):
             for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
                 self.gameBoardArr[-i-1-self.groundSize][j][0] = "m"
-        print(mando.SCORE)
+        print("SCORE: " + str(mando.SCORE))
+        print("LIVES: " + str(mando.LIVES))
 
         return 1
 
@@ -239,11 +248,18 @@ class GameBoard:
                 elif self.gameBoardArr[i][j][0] == "t":
                     print(colorama.Back.RED + " ", end="")
                 elif self.gameBoardArr[i][j][0] == "m":
-                    if mando.body[bodyCounter] == " ":
-                        print(colorama.Back.BLUE + " ", end="")
-                    else:
-                        print(colorama.Back.BLUE + colorama.Fore.BLACK + mando.body[bodyCounter], end="")
-                    bodyCounter += 1
+                    if mando.shieldToggle == 0:
+                        if mando.body[bodyCounter] == " ":
+                            print(colorama.Back.BLUE + " ", end="")
+                        else:
+                            print(colorama.Back.BLUE + colorama.Fore.BLACK + mando.body[bodyCounter], end="")
+                        bodyCounter += 1
+                    elif mando.shieldToggle == 1:
+                        if mando.body[bodyCounter] == " ":
+                            print(colorama.Back.GREEN + " ", end="")
+                        else:
+                            print(colorama.Back.GREEN + colorama.Fore.BLACK + mando.body[bodyCounter], end="")
+                        bodyCounter += 1
                 elif self.gameBoardArr[i][j][0] == "k":
                     print(colorama.Back.RED + " ", end="")
                 elif self.gameBoardArr[i][j][0] == "c":
@@ -257,6 +273,17 @@ class GameBoard:
                 else:
                     print(colorama.Back.BLUE + " ", end="")
             print()
+        
+        if mando.shieldToggle == 0:
+            if self.currentShieldCoolDownTime > 0:
+                self.currentShieldCoolDownTime -= 1
+        elif mando.shieldToggle == 1:
+            if self.currentShieldONTime > 100:
+                mando.shieldToggle = 0
+                self.currentShieldONTime = 0
+                self.currentShieldCoolDownTime = 60
+            else:
+                self.currentShieldONTime += 1
 
         if mando.LIVES <= 0:
             printGameOver()

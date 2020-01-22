@@ -44,3 +44,8 @@ def mandoHandler(board, mando, char):
             board.removeMando(mando)
             mando.moveDown()
             board.moveMando(mando)
+    elif char == " ":
+        c = board.shieldChecker(mando)
+        
+        if c == 1:
+            mando.shieldToggle = 1
