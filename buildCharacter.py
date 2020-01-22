@@ -42,7 +42,9 @@ class beamBarrier:
 
         self.formChoice = random.randint(1, 4)
 
-        self.size = 6
+        self.vSize = 10
+        self.hSize = 15
+        self.crossSize = 10
 
         self.position_x = x
         self.position_y = y
