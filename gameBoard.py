@@ -1,4 +1,5 @@
 import colorama
+from buildCharacter import beamBarrier
 from random import seed, randint
 
 class GameBoard:
@@ -43,6 +44,11 @@ class GameBoard:
             coinWidth = randint(0, gameWidth-1)
             if self.gameBoardArr[coinHeight][coinWidth][0] == " ":
                 self.gameBoardArr[coinHeight][coinWidth][0] = "c"
+
+        # Adding the beams
+        numberBeams = randint(50, 100)
+        # Now actually adding the beams to gameboard
+        
         
         # Checking loop made for each loop, rn the loop is checking above mando for moving up
         j = mando.position_x + mando.bodyWidth
@@ -146,7 +152,7 @@ class GameBoard:
                     if mando.body[bodyCounter] == " ":
                         print(colorama.Back.BLUE + " ", end="")
                     else:
-                        print(colorama.Back.BLUE + colorama.Fore.RED + mando.body[bodyCounter], end="")
+                        print(colorama.Back.BLUE + colorama.Fore.BLACK + mando.body[bodyCounter], end="")
                     bodyCounter += 1
                 elif self.gameBoardArr[i][j][0] == "k":
                     print(colorama.Back.RED + " ", end="")
