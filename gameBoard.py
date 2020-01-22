@@ -8,7 +8,7 @@ from buildCharacter import beamBarrier
 from random import seed, randint
 
 class GameBoard:
-    def __init__(self, mando, gameWidth=2000, gameHeight=50):
+    def __init__(self, mando, gameWidth=600, gameHeight=50):
         self.gameWidth = gameWidth
         self.gameHeight = gameHeight
 
@@ -27,6 +27,9 @@ class GameBoard:
         # Making the ground and sky
         self.groundSize = 3
         self.skySize = 1
+
+        # Bullet array
+        self.bulletArray = []
 
         # Adding characters for sky
         for i in range(self.skySize):
@@ -49,7 +52,7 @@ class GameBoard:
         # Now actually adding these coins to gameboard
         for i in range(numberCoins):
             coinHeight = randint(self.groundSize+1, gameHeight-self.skySize)
-            coinWidth = randint(0, gameWidth-1)
+            coinWidth = randint(0, gameWidth-500)
             if self.gameBoardArr[coinHeight][coinWidth][0] == " ":
                 self.gameBoardArr[coinHeight][coinWidth][0] = "c"
 
@@ -64,7 +67,7 @@ class GameBoard:
         # Now actually adding the beams to gameboard
         for i in range(numberBeams):
             beamY = randint(self.groundSize+1, gameHeight-self.skySize)
-            beamX = randint(0, gameWidth-1)
+            beamX = randint(0, gameWidth-500)
             beam = beamBarrier(beamX, beamY)
 
             if beam.formChoice == 1:
@@ -97,6 +100,8 @@ class GameBoard:
                             self.gameBoardArr[-i-1][j][0] = "-" + str(i)
                     except:
                         pass
+
+
     def removeBarrier(self, barrier):
         for i in range(self.gameHeight):
             for j in range(self.gameWidth):
@@ -126,10 +131,14 @@ class GameBoard:
                     mando.SCORE += 1
                     return 1
                 elif length > 1:
-                    mando.LIVES -= 1
-                    printLifeLost()
-                    self.removeBarrier(self.gameBoardArr[-i-1-self.groundSize][j][0])
-                    return 1
+                    if mando.shieldToggle == 0:
+                        mando.LIVES -= 1
+                        printLifeLost()
+                        self.removeBarrier(self.gameBoardArr[-i-1-self.groundSize][j][0])
+                        return 1
+                    elif mando.shieldToggle == 1:
+                        self.removeBarrier(self.gameBoardArr[-i-1-self.groundSize][j][0])
+                        return 1
                 if self.gameBoardArr[-i-1-self.groundSize][j][0] == "S":
                     mando.mandoSpeed += 3
                     self.frameSpeed += 3
@@ -147,10 +156,14 @@ class GameBoard:
                     mando.SCORE += 1
                     return 1
                 elif length > 1:
-                    mando.LIVES -= 1
-                    printLifeLost()
-                    self.removeBarrier(self.gameBoardArr[-i-1-self.groundSize][j][0])
-                    return 1
+                    if mando.shieldToggle == 0:
+                        mando.LIVES -= 1
+                        printLifeLost()
+                        self.removeBarrier(self.gameBoardArr[-i-1-self.groundSize][j][0])
+                        return 1
+                    elif mando.shieldToggle == 1:
+                        self.removeBarrier(self.gameBoardArr[-i-1-self.groundSize][j][0])
+                        return 1
                 elif self.gameBoardArr[-i-2][j][0] != " ":
                     return 0
         elif char == "d":
@@ -166,10 +179,14 @@ class GameBoard:
                     mando.SCORE += 1
                     return 1
                 elif length > 1:
-                    mando.LIVES -= 1
-                    printLifeLost()
-                    self.removeBarrier(self.gameBoardArr[-i-1-self.groundSize][j][0])
-                    return 1
+                    if mando.shieldToggle == 0:
+                        mando.LIVES -= 1
+                        printLifeLost()
+                        self.removeBarrier(self.gameBoardArr[-i-1-self.groundSize][j][0])
+                        return 1
+                    elif mando.shieldToggle == 1:
+                        self.removeBarrier(self.gameBoardArr[-i-1-self.groundSize][j][0])
+                        return 1
                 elif self.gameBoardArr[-i-1][j][0] != " ":
                         return 0
         elif char == "a":
@@ -186,10 +203,14 @@ class GameBoard:
                     mando.SCORE += 1
                     return 1
                 elif length > 1:
-                    mando.LIVES -= 1
-                    printLifeLost()
-                    self.removeBarrier(self.gameBoardArr[-i-1-self.groundSize][j][0])
-                    return 1
+                    if mando.shieldToggle == 0:
+                        mando.LIVES -= 1
+                        printLifeLost()
+                        self.removeBarrier(self.gameBoardArr[-i-1-self.groundSize][j][0])
+                        return 1
+                    elif mando.shieldToggle == 1:
+                        self.removeBarrier(self.gameBoardArr[-i-1-self.groundSize][j][0])
+                        return 1
                 elif self.gameBoardArr[-i-1][j][0] != " ":
                         return 0
         return 1
@@ -213,7 +234,7 @@ class GameBoard:
         return 1
 
     def updateFrame(self, mando):
-        if self.offset + self.frameWidth < self.gameWidth:
+        if self.offset + self.frameWidth < self.gameWidth - 500:
             if self.gameClock % 3 == 2:
                 if mando.position_x == self.offset:
                     canMove = self.check(mando, 'd')
@@ -224,6 +245,33 @@ class GameBoard:
                         self.offset += self.frameSpeed
                 else:
                     self.offset += self.frameSpeed
+
+    def removeBullet(self, bullet):
+        self.gameBoardArr[bullet.position_y][bullet.position_x][0] = " "
+    
+    def checkBullet(self, bullet, mando):
+        try:
+            if self.gameBoardArr[bullet.position_y][bullet.position_x+1][0] == " ":
+                return 1
+            elif "=" in self.gameBoardArr[bullet.position_y][bullet.position_x+1][0]:
+                self.gameBoardArr[bullet.position_y][bullet.position_x+1][0] = " "
+                self.gameBoardArr[bullet.position_y][bullet.position_x][0] = " "
+                self.bulletArray.remove(bullet)
+                return 0
+            elif "-" in self.gameBoardArr[bullet.position_y][bullet.position_x+1][0]:
+                self.gameBoardArr[bullet.position_y][bullet.position_x+1][0] = " "
+                self.gameBoardArr[bullet.position_y][bullet.position_x][0] = " "
+                self.bulletArray.remove(bullet)
+                return 0
+            elif self.gameBoardArr[bullet.position_y][bullet.position_x+1][0] == "c":
+                mando.SCORE += 1
+                self.gameBoardArr[bullet.position_y][bullet.position_x][0] = " "
+                return 1
+        except:
+            self.gameBoardArr[bullet.position_y][bullet.position_x][0] = " "
+            self.bulletArray.remove(bullet)
+            return 0
+            pass
 
     def cprintBoard(self, mando):
         print("\033[0;0H]")
@@ -270,6 +318,8 @@ class GameBoard:
                     print(colorama.Back.RED + " ", end="")
                 elif self.gameBoardArr[i][j][0] == "=":
                     print(colorama.Back.GREEN + " ", end="")
+                elif self.gameBoardArr[i][j][0] == "b":
+                    print(colorama.Back.BLUE + colorama.Fore.YELLOW + "b", end="")
                 else:
                     print(colorama.Back.BLUE + " ", end="")
             print()
@@ -284,6 +334,13 @@ class GameBoard:
                 self.currentShieldCoolDownTime = 60
             else:
                 self.currentShieldONTime += 1
+
+        for bullet in self.bulletArray:
+            check = self.checkBullet(bullet, mando)
+            if check == 1:
+                self.removeBullet(bullet)
+                bullet.moveBullet()
+                self.gameBoardArr[bullet.position_y][bullet.position_x][0] = "b"
 
         if mando.LIVES <= 0:
             printGameOver()

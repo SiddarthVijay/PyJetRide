@@ -1,3 +1,5 @@
+from buildCharacter import bullet
+
 def mandoHandler(board, mando, char):
     '''Handles movement, firing of gun etc'''
 
@@ -49,3 +51,6 @@ def mandoHandler(board, mando, char):
         
         if c == 1:
             mando.shieldToggle = 1
+    elif char == "b":
+        newBullet = bullet(mando.position_x + mando.bodyWidth, -mando.position_y + 1 - board.groundSize - mando.bodyHeight)
+        board.bulletArray.append(newBullet)

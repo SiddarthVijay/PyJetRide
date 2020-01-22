@@ -49,5 +49,11 @@ class beamBarrier:
         self.position_x = x
         self.position_y = y
 
-# mando = Mandalorian()
-# mando.print()
+class bullet:
+    def __init__(self, x, y):
+        self.position_x = x
+        self.position_y = y
+
+    def moveBullet(self):
+        self.position_x += 1
+
