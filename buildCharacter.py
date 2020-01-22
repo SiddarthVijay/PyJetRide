@@ -13,17 +13,19 @@ class Mandalorian:
 
         self.isShield = 0
 
+        self.mandoSpeed = 1
+
     def moveUp(self):
-        self.position_y += 1
+        self.position_y += self.mandoSpeed
         print("moved up")
     def moveDown(self):
-        self.position_y -= 1
+        self.position_y -= self.mandoSpeed
         print("moved down")
     def moveRight(self):
-        self.position_x += 1
+        self.position_x += self.mandoSpeed
         print("moved right")
     def moveLeft(self):
-        self.position_x -= 1
+        self.position_x -= self.mandoSpeed
         print("moved left")
     
     def print(self):

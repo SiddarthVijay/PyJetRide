@@ -1,5 +1,9 @@
 import colorama
 import itertools
+import sys
+
+from printMessages import printLifeLost, printGameOver
+
 from buildCharacter import beamBarrier
 from random import seed, randint
 
@@ -11,6 +15,7 @@ class GameBoard:
         self.frameWidth = 200
         self.frameHeight = 50
         self.offset = 0
+        self.frameSpeed = 1
 
         self.gameClock = 0
 
@@ -46,6 +51,12 @@ class GameBoard:
             if self.gameBoardArr[coinHeight][coinWidth][0] == " ":
                 self.gameBoardArr[coinHeight][coinWidth][0] = "c"
 
+        # Adding th espeed powerup
+        speedHeight = randint(self.groundSize+1, gameHeight-self.skySize)
+        coinWidth = randint(10, 20)
+        if self.gameBoardArr[coinHeight][coinWidth][0] == " ":
+            self.gameBoardArr[coinHeight][coinWidth][0] = "S"
+
         # Adding the beams
         numberBeams = randint(100, 150)
         # Now actually adding the beams to gameboard
@@ -58,61 +69,38 @@ class GameBoard:
                 try:
                     j = beam.position_x
                     for i in range(beam.position_y + self.groundSize, beam.position_y + beam.vSize + self.groundSize):
-                        if self.gameBoardArr[-i-1][j][0] == " ":
-                            self.gameBoardArr[-i-1][j][0] = "-"
+                        if self.gameBoardArr[-i-1][j][0] in "c ":
+                            self.gameBoardArr[-i-1][j][0] = "-" + str(i)
                 except:
                     pass
             elif beam.formChoice == 2:
                 try:
                     i = beam.position_y
                     for j in range(beam.position_x, beam.position_x + beam.hSize):
-                        if self.gameBoardArr[-i-1][j][0] == " ":
+                        if self.gameBoardArr[-i-1][j][0] in "c ":
                             self.gameBoardArr[-i-1][j][0] = "="
                 except:
                     pass
             elif beam.formChoice == 3:
                 for i, j in zip(range(beam.position_y + self.groundSize, beam.position_y + beam.crossSize + self.groundSize), range(beam.position_x, beam.position_x + beam.crossSize)):
                     try:
-                        if self.gameBoardArr[-i-1][j][0] == " ":
-                            self.gameBoardArr[-i-1][j][0] = "-"
+                        if self.gameBoardArr[-i-1][j][0] in "c ":
+                            self.gameBoardArr[-i-1][j][0] = "-" + str(i)
                     except:
                         pass
             elif beam.formChoice == 4:
                 for i, j in zip(range(beam.position_y + self.groundSize, beam.position_y + beam.crossSize + self.groundSize), range(beam.position_x + beam.crossSize, beam.position_x, -1)):
                     try:
-                        if self.gameBoardArr[-i-1][j][0] == " ":
-                            self.gameBoardArr[-i-1][j][0] = "-"
+                        if self.gameBoardArr[-i-1][j][0] in "c ":
+                            self.gameBoardArr[-i-1][j][0] = "-" + str(i)
                     except:
                         pass
 
-        
-        # Checking loop made for each loop, rn the loop is checking above mando for moving up
-        #j = mando.position_x + mando.bodyWidth
-        #for i in range(mando.position_y + self.groundSize, mando.position_y + mando.bodyHeight + self.groundSize):
-        #    self.gameBoardArr[-i-1][j][0] = "k"
-        
-        # Checking loop for building beams
-        # Vertical beams - done
-        #beam = beamBarrier(8, 6)
-        #j = beam.position_x
-        #for i in range(beam.position_y + self.groundSize, beam.position_y + beam.size + self.groundSize):            
-        #    self.gameBoardArr[-i-1][j][0] = "-"
-
-        # Horizontal beams - done
-        #beam = beamBarrier(15, 8)
-        #i = beam.position_y
-        #for j in range(beam.position_x, beam.position_x + beam.size):
-        #    self.gameBoardArr[-i-1][j][0] = "-"
-        
-        # left to right beam - done
-        #beam = beamBarrier(25, 8)
-        #for i, j in zip(range(beam.position_y + self.groundSize, beam.position_y + beam.size + self.groundSize), range(beam.position_x, beam.position_x + beam.size)):
-        #        self.gameBoardArr[-i-1][j][0] = "-"
-
-        # right to left beam - done
-        #beam = beamBarrier(35, 8)
-        #for i, j in zip(range(beam.position_y + self.groundSize, beam.position_y + beam.size + self.groundSize), range(beam.position_x + beam.size, beam.position_x, -1)):
-        #        self.gameBoardArr[-i-1][j][0] = "-"
+    def removeBarrier(self, barrier):
+        for i in range(self.gameHeight):
+            for j in range(self.gameWidth):
+                if self.gameBoardArr[i][j][0] is barrier:
+                    self.gameBoardArr[i][j][0] = " "
 
     def updateClock(self):
         self.gameClock += 1
@@ -122,16 +110,38 @@ class GameBoard:
         if char == "w":
             i = mando.position_y + mando.bodyHeight
             for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
+                try:
+                    length = len(self.gameBoardArr[-i-1-self.groundSize][j][0])
+                except:
+                    length = 0
                 if self.gameBoardArr[-i-1-self.groundSize][j][0] == "c":
                     mando.SCORE += 1
+                    return 1
+                elif length > 1:
+                    mando.LIVES -= 1
+                    printLifeLost()
+                    self.removeBarrier(self.gameBoardArr[-i-1-self.groundSize][j][0])
+                    return 1
+                if self.gameBoardArr[-i-1-self.groundSize][j][0] == "S":
+                    mando.mandoSpeed += 3
+                    self.frameSpeed += 3
                     return 1
                 elif self.gameBoardArr[-i-1-self.groundSize][j][0] != " ":
                     return 0
         elif char == "s":
             i = mando.position_y + 1
             for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
+                try:
+                    length = len(self.gameBoardArr[-i-2][j][0])
+                except:
+                    length = 0
                 if self.gameBoardArr[-i-2][j][0] == "c":
                     mando.SCORE += 1
+                    return 1
+                elif length > 1:
+                    mando.LIVES -= 1
+                    printLifeLost()
+                    self.removeBarrier(self.gameBoardArr[-i-1-self.groundSize][j][0])
                     return 1
                 elif self.gameBoardArr[-i-2][j][0] != " ":
                     return 0
@@ -140,8 +150,17 @@ class GameBoard:
                 return 0
             j = mando.position_x + mando.bodyWidth
             for i in range(mando.position_y + self.groundSize, mando.position_y + mando.bodyHeight + self.groundSize):
+                try:
+                    length = len(self.gameBoardArr[-i-1][j][0])
+                except:
+                    length = 0
                 if self.gameBoardArr[-i-1][j][0] == "c":
                     mando.SCORE += 1
+                    return 1
+                elif length > 1:
+                    mando.LIVES -= 1
+                    printLifeLost()
+                    self.removeBarrier(self.gameBoardArr[-i-1-self.groundSize][j][0])
                     return 1
                 elif self.gameBoardArr[-i-1][j][0] != " ":
                         return 0
@@ -151,8 +170,17 @@ class GameBoard:
                 return 0
             j = mando.position_x - 1
             for i in range(mando.position_y + self.groundSize, mando.position_y + mando.bodyHeight + self.groundSize):
+                try:
+                    length = len(self.gameBoardArr[-i-1][j][0])
+                except:
+                    length = 0
                 if self.gameBoardArr[-i-1][j][0] == "c":
                     mando.SCORE += 1
+                    return 1
+                elif length > 1:
+                    mando.LIVES -= 1
+                    printLifeLost()
+                    self.removeBarrier(self.gameBoardArr[-i-1-self.groundSize][j][0])
                     return 1
                 elif self.gameBoardArr[-i-1][j][0] != " ":
                         return 0
@@ -184,9 +212,9 @@ class GameBoard:
                         self.removeMando(mando)
                         mando.moveRight()
                         self.moveMando(mando)
-                        self.offset += 1
+                        self.offset += self.frameSpeed
                 else:
-                    self.offset += 1
+                    self.offset += self.frameSpeed
 
     def cprintBoard(self, mando):
         print("\033[0;0H]")
@@ -194,6 +222,9 @@ class GameBoard:
             for j in range(self.offset, self.frameWidth + self.offset):
                 print(self.gameBoardArr[i][j][0], end="")
             print()
+        if mando.LIVES <= 0:
+            printGameOver()
+            sys.exit
         return
 
     def printBoard(self, mando):
@@ -216,11 +247,17 @@ class GameBoard:
                 elif self.gameBoardArr[i][j][0] == "k":
                     print(colorama.Back.RED + " ", end="")
                 elif self.gameBoardArr[i][j][0] == "c":
-                    print(colorama.Back.BLUE + colorama.Fore.YELLOW + "C", end="")
-                elif self.gameBoardArr[i][j][0] == "-":
+                    print(colorama.Back.BLUE + colorama.Fore.YELLOW + "O", end="")
+                elif self.gameBoardArr[i][j][0] == "S":
+                    print(colorama.Back.RED + colorama.Fore.YELLOW + "S", end="")
+                elif "-" in self.gameBoardArr[i][j][0]:
                     print(colorama.Back.RED + " ", end="")
                 elif self.gameBoardArr[i][j][0] == "=":
                     print(colorama.Back.GREEN + " ", end="")
                 else:
                     print(colorama.Back.BLUE + " ", end="")
             print()
+
+        if mando.LIVES <= 0:
+            printGameOver()
+            sys.exit

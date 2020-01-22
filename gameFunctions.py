@@ -5,16 +5,17 @@ import input
 from buildCharacter import Mandalorian
 from gameHandler import mandoHandler
 from gameBoard import GameBoard
+from printMessages import printGameOver
 
 
 def endGame():
-    print("Sorry, you lost")
+    printGameOver()
     return 1
 
 
 def gameLoop(board, mando):
     # Handling lives
-    if mando.LIVES == 0:
+    if mando.LIVES <= 0:
         gameEnd = endGame()
     else:
         board.updateClock()
