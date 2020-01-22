@@ -66,6 +66,12 @@ class GameBoard:
         for i in range(beam.position_y + self.groundSize, beam.position_y + beam.size + self.groundSize):            
             self.gameBoardArr[-i-1][j][0] = "-"
 
+        # Horizontal beams - done
+        beam = beamBarrier(15, 8)
+        i = beam.position_y
+        for j in range(beam.position_x, beam.position_x + beam.size):
+            self.gameBoardArr[-i-1][j][0] = "-"
+
     def updateClock(self):
         self.gameClock += 1
 
