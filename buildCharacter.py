@@ -44,7 +44,7 @@ class beamBarrier:
 
         self.vSize = 10
         self.hSize = 15
-        self.crossSize = 10
+        self.crossSize = 8
 
         self.position_x = x
         self.position_y = y

@@ -47,7 +47,7 @@ class GameBoard:
                 self.gameBoardArr[coinHeight][coinWidth][0] = "c"
 
         # Adding the beams
-        numberBeams = randint(50, 100)
+        numberBeams = randint(100, 150)
         # Now actually adding the beams to gameboard
         for i in range(numberBeams):
             beamY = randint(self.groundSize+1, gameHeight-self.skySize)
@@ -57,29 +57,33 @@ class GameBoard:
             if beam.formChoice == 1:
                 try:
                     j = beam.position_x
-                    for i in range(beam.position_y + self.groundSize, beam.position_y + beam.vSize + self.groundSize):            
-                        self.gameBoardArr[-i-1][j][0] = "-"
+                    for i in range(beam.position_y + self.groundSize, beam.position_y + beam.vSize + self.groundSize):
+                        if self.gameBoardArr[-i-1][j][0] == " ":
+                            self.gameBoardArr[-i-1][j][0] = "-"
                 except:
                     pass
             elif beam.formChoice == 2:
                 try:
                     i = beam.position_y
                     for j in range(beam.position_x, beam.position_x + beam.hSize):
-                        self.gameBoardArr[-i-1][j][0] = "-"
+                        if self.gameBoardArr[-i-1][j][0] == " ":
+                            self.gameBoardArr[-i-1][j][0] = "="
                 except:
                     pass
             elif beam.formChoice == 3:
-                try:
-                    for i, j in zip(range(beam.position_y + self.groundSize, beam.position_y + beam.crossSize + self.groundSize), range(beam.position_x, beam.position_x + beam.size)):
-                        self.gameBoardArr[-i-1][j][0] = "-"
-                except:
-                    pass
+                for i, j in zip(range(beam.position_y + self.groundSize, beam.position_y + beam.crossSize + self.groundSize), range(beam.position_x, beam.position_x + beam.crossSize)):
+                    try:
+                        if self.gameBoardArr[-i-1][j][0] == " ":
+                            self.gameBoardArr[-i-1][j][0] = "-"
+                    except:
+                        pass
             elif beam.formChoice == 4:
-                try:
-                    for i, j in zip(range(beam.position_y + self.groundSize, beam.position_y + beam.crossSize + self.groundSize), range(beam.position_x + beam.size, beam.position_x, -1)):
-                        self.gameBoardArr[-i-1][j][0] = "-"
-                except:
-                    pass
+                for i, j in zip(range(beam.position_y + self.groundSize, beam.position_y + beam.crossSize + self.groundSize), range(beam.position_x + beam.crossSize, beam.position_x, -1)):
+                    try:
+                        if self.gameBoardArr[-i-1][j][0] == " ":
+                            self.gameBoardArr[-i-1][j][0] = "-"
+                    except:
+                        pass
 
         
         # Checking loop made for each loop, rn the loop is checking above mando for moving up
@@ -184,7 +188,7 @@ class GameBoard:
                 else:
                     self.offset += 1
 
-    def printBoard(self, mando):
+    def cprintBoard(self, mando):
         print("\033[0;0H]")
         for i in range(self.frameHeight):
             for j in range(self.offset, self.frameWidth + self.offset):
@@ -192,7 +196,7 @@ class GameBoard:
             print()
         return
 
-    def cprintBoard(self, mando):
+    def printBoard(self, mando):
         print("\033[0;0H]")
         bodyCounter = 0
         for i in range(self.frameHeight):
@@ -213,6 +217,10 @@ class GameBoard:
                     print(colorama.Back.RED + " ", end="")
                 elif self.gameBoardArr[i][j][0] == "c":
                     print(colorama.Back.BLUE + colorama.Fore.YELLOW + "C", end="")
+                elif self.gameBoardArr[i][j][0] == "-":
+                    print(colorama.Back.RED + " ", end="")
+                elif self.gameBoardArr[i][j][0] == "=":
+                    print(colorama.Back.GREEN + " ", end="")
                 else:
                     print(colorama.Back.BLUE + " ", end="")
             print()
