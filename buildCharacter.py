@@ -1,10 +1,17 @@
 import random
 
-class Mandalorian:
+class person:
     def __init__(self):
-        self.body = [' ', '_', '_', '_', ' ', ' ', '|', '+', '|', ' ', ' ', '-', '-', '-', ' ', '/', '|', ' ', '|', '\\', ' ', '-', '-', '-', ' ', ' ', '/', ' ', '\\', ' ']
         self.position_x = 0
         self.position_y = 0
+
+        self.LIVES = 3
+
+
+class Mandalorian(person):
+    def __init__(self):
+        super().__init__()
+        self.body = [' ', '_', '_', '_', ' ', ' ', '|', '+', '|', ' ', ' ', '-', '-', '-', ' ', '/', '|', ' ', '|', '\\', ' ', '-', '-', '-', ' ', ' ', '/', ' ', '\\', ' ']
         self.bodyHeight = 6
         self.bodyWidth = 5
 
@@ -31,6 +38,13 @@ class Mandalorian:
             for j in i:
                 print(j, end='')
             print()
+
+
+class bossMan(person):
+    def __init__(self):
+        super().__init__()
+
+        self.LIVES = 20
 
 
 class beamBarrier:

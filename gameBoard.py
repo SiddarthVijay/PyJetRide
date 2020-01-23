@@ -8,7 +8,7 @@ from buildCharacter import beamBarrier
 from random import seed, randint
 
 class GameBoard:
-    def __init__(self, mando, gameWidth=600, gameHeight=50):
+    def __init__(self, mando, gameWidth=2000, gameHeight=50):
         self.gameWidth = gameWidth
         self.gameHeight = gameHeight
 
