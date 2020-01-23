@@ -8,7 +8,7 @@ from buildCharacter import beamBarrier
 from random import seed, randint
 
 class GameBoard:
-    def __init__(self, mando, gameWidth=2000, gameHeight=50):
+    def __init__(self, mando, gameWidth=500, gameHeight=50):
         self.gameWidth = gameWidth
         self.gameHeight = gameHeight
 
@@ -31,6 +31,8 @@ class GameBoard:
         # Bullet array
         self.bulletArray = []
 
+        self.bossLocation = 10
+
         # Adding characters for sky
         for i in range(self.skySize):
             for j in range(self.gameWidth):
@@ -46,13 +48,18 @@ class GameBoard:
             for j in range(mando.position_x, mando.position_x + mando.bodyWidth):
                 self.gameBoardArr[-i-1-self.groundSize][j][0] = "m"
 
+        # Adding a boss
+        for i in range(10, 30):
+            for j in range(gameWidth-30, gameWidth-20):
+                self.gameBoardArr[-i-1-self.groundSize][j][0] = "-"
+
         seed(1)
         # Adding coins
         numberCoins = randint(250, 500)
         # Now actually adding these coins to gameboard
         for i in range(numberCoins):
             coinHeight = randint(self.groundSize+1, gameHeight-self.skySize)
-            coinWidth = randint(0, gameWidth-500)
+            coinWidth = randint(0, gameWidth-100)
             if self.gameBoardArr[coinHeight][coinWidth][0] == " ":
                 self.gameBoardArr[coinHeight][coinWidth][0] = "c"
 
@@ -63,11 +70,11 @@ class GameBoard:
             self.gameBoardArr[coinHeight][coinWidth][0] = "S"
 
         # Adding the beams
-        numberBeams = randint(100, 150)
+        numberBeams = randint(75, 100)
         # Now actually adding the beams to gameboard
         for i in range(numberBeams):
             beamY = randint(self.groundSize+1, gameHeight-self.skySize)
-            beamX = randint(0, gameWidth-500)
+            beamX = randint(0, gameWidth-100)
             beam = beamBarrier(beamX, beamY)
 
             if beam.formChoice == 1:
@@ -234,7 +241,7 @@ class GameBoard:
         return 1
 
     def updateFrame(self, mando):
-        if self.offset + self.frameWidth < self.gameWidth - 500:
+        if self.offset + self.frameWidth < self.gameWidth - 5:
             if self.gameClock % 3 == 2:
                 if mando.position_x == self.offset:
                     canMove = self.check(mando, 'd')
@@ -341,6 +348,17 @@ class GameBoard:
                 self.removeBullet(bullet)
                 bullet.moveBullet()
                 self.gameBoardArr[bullet.position_y][bullet.position_x][0] = "b"
+        
+        if self.gameClock%2 == 0:
+            try:
+                for i in range(self.bossLocation, self.bossLocation+10):
+                    for j in range(self.gameWidth-30, self.gameWidth-20):
+                        self.gameBoardArr[-i-1-self.groundSize][j][0] = " "
+                for i in range(mando.position_y, mando.position_y+10):
+                    for j in range(self.gameWidth-30, self.gameWidth-20):
+                        self.gameBoardArr[-i-1-self.groundSize][j][0] = "-"
+            except:
+                pass
 
         if mando.LIVES <= 0:
             printGameOver()
